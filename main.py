@@ -4,6 +4,8 @@ import myConstants
 import myPlayer
 import myStrikes
 import time
+import other
+
 
 # Default
 pygame.init()
@@ -11,34 +13,25 @@ screen = pygame.display.set_mode((myConstants.WIDTH, myConstants.HEIGHT))
 pygame.display.set_caption("Brawl Training")
 clock = pygame.time.Clock()
 screen.fill(myConstants.BLACK)
-# Sprites
+# Sprites Groups
 all_sprites = pygame.sprite.Group()
 all_strikes = pygame.sprite.Group()
 
 player = myPlayer.Player()
-strike1 = myStrikes.Strike(0, 450, 3, 0)
 
 all_sprites.add(player)
-all_strikes.add(strike1)
 
 all_sprites.draw(screen)
-all_strikes.draw(screen)
-
-f2 = pygame.font.SysFont('serif', 48)
-text2 = f2.render("KRIEG", False,
-                  (0, 180, 0))
 
 # Цикл игры
 running = True
 now = start = time.time()
 while running:
-    if (time.time() - 1 > now):
-        quantity = random.randint(3, 23) # количество ежесекундно добьавляющихся молний
+    if time.time() - 1 > now:
+        quantity = random.randint(13, 23) # количество ежесекундно добьавляющихся молний
         now = time.time()
         for i in range(quantity + 1):
-            all_strikes.add(myStrikes.Strike(0, random.randint(0, myConstants.HEIGHT), 3 + 3 * random.random(), 0)) #
-            all_strikes.add(myStrikes.Strike(random.randint(0, myConstants.WIDTH), 0, 0, 3 + 3 * random.random()))
-            all_strikes.add(myStrikes.Strike(random.randint(0, myConstants.WIDTH), 0, 3 + 3 * random.random(), 3 + 3 * random.random()))
+            other.generator(all_strikes)
     # Держим цикл на правильной скорости
     clock.tick(myConstants.FPS)
 
@@ -57,9 +50,7 @@ while running:
     all_strikes.draw(screen)
 
     # исчезание молний
-    for _ in all_strikes:
-        if _.rect.x > myConstants.WIDTH or _.rect.y > myConstants.HEIGHT:
-            all_strikes.remove(_)
+    other.StrikeDeath(all_strikes)
 
     # стокновения
     for _ in all_strikes:

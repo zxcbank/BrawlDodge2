@@ -16,6 +16,7 @@ class Strike(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
 
+
 def breakout(x, y, x1, y1):
     if (x1 + 10 >= x >= x1) and (y1 + 10 >= y >= y1):
         return True
